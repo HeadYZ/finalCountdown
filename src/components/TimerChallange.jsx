@@ -1,11 +1,19 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 const TimerChallange = ({ title, targetTime }) => {
+	const [timerStarted, setTimerStarted] = useState(false)
 	const [timerExpired, setTimerExpired] = useState(false)
+	const timerRef = useRef()
+
 	const handleStart = () => {
-		setTimeout(() => {
+		timerRef.current = setTimeout(() => {
 			setTimerExpired(true)
 		}, targetTime * 1000)
+		setTimerStarted(true)
+	}
+
+	const handleStop = () => {
+		clearTimeout(timerRef.current)
 	}
 	return (
 		<section className='challenge'>
@@ -15,9 +23,9 @@ const TimerChallange = ({ title, targetTime }) => {
 				{targetTime} second{targetTime > 1 ? 's' : ''}
 			</p>
 			<p>
-				<button onClick={handleStart}>Start Challange</button>
+				<button onClick={timerStarted ? handleStop : handleStart}>{timerStarted ? 'Stop' : 'Start'} Challange</button>
 			</p>
-			<p className=''>Time is running... / Timer inactive</p>
+			<p className={timerStarted ? 'active' : undefined}>{timerStarted ? 'Time is running...' : 'Timer inactive'} / </p>
 		</section>
 	)
 }
