@@ -7,6 +7,7 @@ export default function Player() {
 
 	const handleClick = () => {
 		setPlaterName(userInput.current.value)
+    userInput.current.value = ''
 	}
 
 	return (
