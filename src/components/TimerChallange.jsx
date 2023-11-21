@@ -8,22 +8,32 @@ const TimerChallange = ({ title, targetTime }) => {
 	const dialog = useRef()
 
 	if (remainingTime <= 0) {
-		clearInterval(timerRef)
+		clearInterval(timerRef.current)
+		dialog.current.open()
+	}
+	const handleReset = () => {
 		setRemainingTime(targetTime * 1000)
 	}
 
 	const handleStart = () => {
 		timerRef.current = setInterval(() => {
 			setRemainingTime(prevRemainingTime => prevRemainingTime - 10)
-		}, targetTime * 10)
+		}, 10)
 	}
 
 	const handleStop = () => {
+		dialog.current.open()
 		clearInterval(timerRef.current)
 	}
 	return (
 		<>
-			<ResultModal ref={dialog} targetTime={targetTime} result='lost' />
+			<ResultModal
+				ref={dialog}
+				targetTime={targetTime}
+				result='lost'
+				remainingTime={remainingTime}
+				onReset={handleReset}
+			/>
 			<section className='challenge'>
 				<h2>{title}</h2>
 				<p className='challenge-time'>
